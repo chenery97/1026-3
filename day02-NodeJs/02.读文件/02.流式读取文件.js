@@ -2,7 +2,7 @@
 const fs = require('fs')
 
 // 2. 创建可读流
-const rs = fs.createReadStream('./muisc.mp3')
+const rs = fs.createReadStream('./music.mp3')
 
 // 3. 监听可读流的开启、关闭和读取
 rs.on('open', () => {
