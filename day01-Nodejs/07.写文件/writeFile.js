@@ -14,10 +14,9 @@ function writeFile(url, data) {
 async function fn() {
   for (let v of data) {
     await new Promise((resolve, reject) => {
-      const timer = setInterval(() => {
+      setTimeout(() => {
         writeFile(url, v);
         resolve();
-        clearInterval(timer);
       }, 1000)
     })
   }

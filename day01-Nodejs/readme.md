@@ -131,3 +131,251 @@ __特殊__：process.nextTick()，能在任意阶段优先被执行
    - 它是一个类数组的对象，用于存储数据（存储的全部是二进制数据）
    - Buffer的效率很高，存储和读取的速度都很快，本质就是对内存的直接操作
    - Buffer的大小一旦确定了就不可以修改
+
+
+
+#### 文件系统模块
+
+1. 导入文件系统模块
+
+   `const fs = require('fs')`
+
+2. 读取文件
+
+   - 普通读取：`fs.readFile(filePath [,配置项],(err, data) => {})`
+
+     - 适用于数据量小的文件读取
+
+   - 流式读取
+
+     1. 创建可读流：`const rs = fs.createReadStream(filePath [,配置项])`，创建完会自动打开文件
+     2. 读取文件：`rs.on('data', (data) => {})`，会持续执行回调，直到文件读取完毕，读取完毕会自动关闭文件
+     3. 监听开启和关闭：`rs.on('open/close', () => {})`
+
+     - 适用于数据量大的文件读取
+
+3. 写入文件
+
+   - 普通写入：`fs.writeFile(filePath, data [,配置项], (err) => {})`
+
+     - 适用于数据量小的文件写入
+
+   - 流式写入
+
+     1. 创建可写流：`const ws = fs.createWriteStream(filePath [,配置项])`，创建完会自动打开文件
+     2. 写入文件：`ws.write(data)`，配合可读流操作时，在读取文件的回调中调用该方法
+     3. 关闭文件： `ws.end()`，配合可读流操作时，在可读流关闭的回调中调用该方法
+     4. 监听开启和关闭：`ws.on('open/close', () => {})`
+
+     - 适用于数据量大的文件写入
+
+4. 流式读取文件和流式写入文件
+
+   ```js
+   //copyFile函数封装
+   function copyFile(sourceFile, targetFile) {
+       const fs = require('fs')
+       const rs = fs.createReadStream(sourceFile)
+       const ws = fs.createWriteStream(targetFile)
+       rs.on('data', (data) => {
+           ws.write(data)
+       })
+       rs.on('close', () => {
+           ws.end()
+       })
+   }
+   
+   //copyFile函数封装-简写模式
+   function copyFile(sourceFile, targetFile) {
+       const fs = require('fs')
+       const rs = fs.createReadStream(sourceFile)
+       const ws = fs.createWriteStream(targetFile)
+    	//使用pipe方法会把可读流文件中所有数据写入到可写流文件中，并且写入完成之后会自动关闭可写流   
+       rs.pipe(ws)
+   }
+   ```
+
+
+
+#### MongoDB
+
+1. 什么是MongoDB？
+
+   MongoDB是一种非关系型的数据库软件
+
+2. 数据库类型分类
+
+   1. 关系型数据库(MySQL、Oracle、SQL Server等)：数据库 --> 表 --> 字段和数据行
+      - 表与表之间有关联
+      - 关系复杂
+      - 适用于大数据量的项目
+   2. 非关系型数据库(MongoDB、Redis等)：数据库 --> 集合 --> 文档（类似json）
+      - 关系简单
+      - 适用于数据量不是特别大的项目
+
+3. MongoDB的CURD指令
+
+   1. Create
+
+      ```sql
+      //inset()可以插入一条或多条数据
+      db.users.insert([{
+          name: '张三',
+          age: 30
+      }, {
+          name: '李四',
+          age: 35
+      }])
+      
+      //insertOne({})可以插入一条数据
+      db.users.insertOne({
+          name: '王五',
+          age: 33
+      })
+      
+      //insertMany([{},{},...])可以插入多条数据
+      db.users.insertMany([{
+          name: '赵六',
+          age: 31
+      }, {
+          name: '王八',
+          age: 38
+      }])
+      ```
+
+   2. Update
+
+      ```sql
+      //修改所有符合条件的第一个
+      db.users.update({
+          name: 'chenery'
+      }, {
+          $set: {
+              name: '老大'
+          }
+      })
+      
+      //修改所有符合条件的
+      db.users.update({
+          name: /^王/
+      }, {
+          $set: {
+              name: '老二'
+          }
+      }, {
+          multi: true
+      })
+      
+      //修改所有符合条件的第一个
+      db.users.updateOne({
+          name: /^老/
+      }, {
+          $set: {
+              name: '老三'
+          }
+      })
+      
+      //修改所有符合条件的
+      db.users.updateMany({
+          name: /^老/
+      }, {
+          $set: {
+              family: '老祠'
+          }
+      })
+      ```
+
+   3. Retrieve
+
+      ```sql
+      //查看所有数据库
+      show dbs
+      //查看当前使用的数据库下的所有集合
+      show collections
+      //find() 查找整个集合
+      db.users.find()
+      
+      //find({}) 按照一个条件查找
+      db.users.find({
+          name: 'chenery'
+      })
+      
+      //find({,}) 按照多个条件查找，多个条件是并且的关系
+      db.users.find({
+          age: 38,
+          name: '王五'
+      })
+      
+      //逻辑查找
+      //小于 $lt 小于等于 $lte
+      db.users.find({
+          age: {
+              $lt: 33
+          }
+      })
+      //大于 $gt 大于等于 $gte
+      db.users.find({
+          age: {
+              $gt: 33
+          }
+      })
+      //与 $in 查找一个字段中符合所有条件的其中一个就会被查找出来
+      db.users.find({
+          age: {
+              $in: [22, 30, 31]
+          }
+      })
+      //或 $or 只要符合多个条件中的其中一个就会被查找出来
+      db.users.find({
+          $or: [{
+              name: 'chenery'
+          }, {
+              age: 30
+          }]
+      })
+      //非 $ne 查找除了符合条件外的所有数据
+      db.users.find({
+          age: {
+              $ne: 38
+          }
+      })
+      
+      //使用函数查找 $where: function(){}
+      db.users.find({
+          $where: function() {
+              return this.age >= 30 && this.age <= 35
+          }
+      })
+      
+      //正则查找
+      db.users.find({
+          name: /^王/
+      })
+      
+      //投影 1显示 0不显示
+      db.users.find({
+          age: {
+              $lt: 35
+          }
+      }, {
+          _id: 0,
+          age: 1,
+          name: 1
+      })
+      ```
+
+   4. Delete
+
+      ```sql
+      //删除符合条件的数据
+      db.users.remove({
+          age: {
+              $lt: 30
+          }
+      })
+      
+      //删除集合中的所有数据
+      db.users.remove({})
+      ```
+
+      
