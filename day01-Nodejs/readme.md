@@ -378,4 +378,77 @@ __特殊__：process.nextTick()，能在任意阶段优先被执行
       db.users.remove({})
       ```
 
-      
+
+
+
+#### mongoose
+
+1. 什么是mongoose？
+
+   mongoose是一个第三方包，封装了一些可以操作MongoDB数据库的方法，在node运行环境下可以通过代码操作数据库
+
+2. 使用
+
+   1. 下载包：`npm i mongoose`
+
+   2. 导入包：`const mongoose = require('mongoose')`
+
+   3. 连接数据库：`mongoose.connect('mongodb://localhost:27017/数据库名', {useNewUrlParser: true, useUnifiedTopology: true})`，返回一个promise对象
+
+   4. 创建Schema对象(集合中每个字段的描述)：
+
+      - 获取Schema对象(构造函数)：`const Schema = mongoose.Schema`
+
+      - 实例化Schema：`const xxxSchema = new Schema({属性名: {type: xxx, required: xxx, unique: xxxx, default: xxx}}, {collection: '集合名'})`，不传第二个参数，在创建model时MongoDB会自动在集合名后面加一个s，并转成小写，传了第二个参数，也要保证在创建model时传的集合名要与之一致
+
+   5. 创建model对象：`const xxxModel = mongoose.model('集合名', xxxSchema)`
+
+      - 操作数据库(CURD)
+
+        - 增：`xxxModel.create(文档, 回调)`，创建一个文档时，传入一个文档对象，创建多个文档时，传入一个由多个文档对象组成的数组
+
+        - 删：
+
+          - `xxxModel.deleteOne({查询条件}, 回调)`，删除第一条匹配的数据
+
+          - `xxxModel.deleteMany({查询条件}, 回调)`，删除所有匹配的数据
+
+        - 改：
+
+          - `xxxModel.updateOne({查询条件}, {$set: {更新的数据}}, 回调)`，更新第一条匹配的数据
+
+          - `xxxModel.updateMany({查询条件}, {更新的数据}, 回调)`，更新所有匹配的数据
+
+        - 查：
+
+          - `xxxModel.find({查询条件}, {投影}, 回调)`，查询所有匹配的数据，没有匹配的数据返回空数组，有匹配的数据返回查询到的数据所组成的数组，投影决定返回的数据中包含哪些字段
+
+          - `xxxModel.findOne({查询条件}, {投影}, 回调)`，查询第一条匹配的数据，没有匹配的数据返回null，有匹配的数据返回该文档对象
+
+   __注__：以上方法中的回调都有两个参数，参数1是错误对象，参数2是数据对象或操作提示对象，如果不写回调，则返回的是一个promise对象
+
+3. mongoose模块化
+
+   结构：db、Schemas、model、CURD
+
+   1. db：用于连接数据库
+   2. Schemas：用于创建各个集合约束
+   3. model：用于创建各个集合
+   4. CURD：用于数据库连接成功后的操作，往集合中进行增删改查
+
+
+
+#### Node.js原生服务器搭建
+
+1. 引入http模块：`const http = require('http')`
+2. 创建服务器：`const server = http.createServer((request, response) => {})`，客户端发送一次请求，服务器响应该请求，这个请求才算完成
+   - request对象保存了客户端发送请求时客户端的数据，使用request.url可以获取到客户端请求的路径和查询字符串
+     
+     - querystring内置模块可以把一个查询字符串转成对象`const obj = querystring.parse(查询字符串)`，当然首先要引入这个模块
+     
+   - response对象是给客户端响应数据的，使用response.end(data)可以给客户端响应数据
+   
+     - 当data中包含中文时，页面渲染的时候会出现乱码，是因为没有告诉浏览器用utf-8进行解码，在响应数据前使用
+   
+       `response.setHeader('content-type', 'text/html;charset=utf-8')`可以解决该问题
+3. 监听服务器：`server.listen(5000, (err) => {})`，监听服务器时，服务器才会开启，传入端口，回调，注意端口冲突问题

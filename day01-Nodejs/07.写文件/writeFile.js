@@ -11,15 +11,17 @@ function writeFile(url, data) {
   })
 }
 
-async function fn() {
+;(async function fn() {
   for (let v of data) {
     await new Promise((resolve, reject) => {
       setTimeout(() => {
-        writeFile(url, v);
-        resolve();
-      }, 1000)
+        try {
+          writeFile(url, v);
+          resolve();
+        } catch (error) {
+          reject(error)
+        }
+      }, 100)
     })
   }
-}
-
-fn();
+})()
