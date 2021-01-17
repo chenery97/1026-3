@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    form{
+      width: 300px;
+      height: 150px;
+      margin: 200px auto;
+      border: 1px solid #bbb;
+    }
+    form label {
+      display: block;
+      width: 250px;
+      margin: 20px auto ;
+    }
+    form .login-btn{
+      display: block;
+      margin: 0 auto;
+    }
+  </style>
+</head>
+
+<body>
+  <form action="http://localhost:5000/login" method="POST">
+    <label>
+      用户名：<input class="detail-user" type="text" name="username" autofocus required />
+    </label>
+    <label>
+      密　码：<input class="detail-pswd" type="password" name="password" required />
+    </label>
+    <input class="login-btn" type="submit" value="登录">
+  </form>
+
+</body>
+
+</html>

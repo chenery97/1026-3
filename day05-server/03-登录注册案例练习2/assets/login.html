@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    form{
+      width: 600px;
+      height: 150px;
+      margin: 200px auto;
+    }
+    form label {
+      display: block;
+      margin: 20px auto ;
+    }
+    form .login-btn{
+      display: block;
+    }
+  </style>
+</head>
+
+<body>
+  <form action="http://localhost:5000/login" method="POST">
+    <label>
+      用户名：<input class="detail-user" type="text" name="username" autofocus />
+      <span style="color: red;"></span>
+    </label>
+    <label>
+      密　码：<input class="detail-pswd" type="password" name="password" />
+      <span style="color: red;"></span>
+    </label>
+    <input class="login-btn" type="submit" value="登录">
+  </form>
+
+  <script>
+    // 1.获取元素
+    const username = document.querySelector('input[name=username]');
+    const pswd = document.querySelector('input[name=password]');
+    const submit = document.querySelector('.login-btn');
+
+    let userFlag = false;
+    let pswdFlag = false;
+
+    // 2.注册事件
+    username.onblur = function () {
+      // 获取输入的数据
+      const value = this.value;
+      // 正则校验
+      const re = /^[A-Za-z]{6,18}$/.test(value);
+      // 判断是否符合规则
+      if (!re) {
+        this.nextElementSibling.innerText = '请输入6~18位的英文字符';
+        userFlag = false
+      } else {
+        this.nextElementSibling.innerText = '';
+        userFlag = true
+      }
+    }
+    pswd.onblur = function () {
+      // 获取输入的数据
+      const value = this.value;
+      // 正则校验
+      const re = /^\w{6,18}$/.test(value);
+      // 判断是否符合规则
+      if (!re) {
+        this.nextElementSibling.innerText = '请输入6~18位的数字、英文或下划线';
+        pswdFlag = false
+      } else {
+        this.nextElementSibling.innerText = '';
+        pswdFlag = true
+      }
+    }
+    submit.onclick = function (e) {
+      if (!(userFlag && pswdFlag)) {
+        // e.preventDefault()
+        return false
+      }
+    }
+  </script>
+</body>
+
+</html>

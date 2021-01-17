@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    form{
+      width: 800px;
+      height: 200px;
+      margin: 200px auto;
+    }
+    form label{
+      display: block;
+      margin: 10px 0;
+    }
+    form .register-btn{
+      display: block;
+    }
+  </style>
+</head>
+
+<body>
+  <form action="http://localhost:5000/register" method="POST">
+    <label>
+      用 户 名：<input type="text" name="username" autofocus />
+      <span style="color: red;"></span>
+    </label>
+    <label>
+      密　　码：<input type="password" name="password" />
+      <span style="color: red;"></span>
+    </label>
+    <label>
+      确认密码：<input type="password" name="repassword" />
+      <span style="color: red;"></span>
+    </label>
+    <input class="register-btn" type="submit" value="注册">
+  </form>
+
+  <script>
+    // 1.获取元素
+    const username = document.querySelector('input[name=username]');
+    const pswd = document.querySelector('input[name=password]');
+    const repswd = document.querySelector('input[name=repassword]');
+    const submit = document.querySelector('.register-btn');
+
+    const flag = {username: false, password: false};
+    let repswdFlag = false;
+
+    // 2.注册事件
+    /* username.onblur = function() {
+      // 获取输入的数据
+      const value = this.value;
+      // 正则校验
+      const re = /^[A-Za-z]{6,18}$/.test(value);
+      // 判断是否符合规则
+      if (!re) {
+        this.nextElementSibling.innerText = '请输入6~18位的英文字符';
+      } else {
+        this.nextElementSibling.innerText = '';
+      }
+    } */
+    /* pswd.onblur = function() {
+      // 获取输入的数据
+      const value = this.value;
+      // 正则校验
+      const re = /^\w{6,18}$/.test(value);
+      // 判断是否符合规则
+      if (!re) {
+        this.nextElementSibling.innerText = '请输入6~18位的数字、英文或下划线';
+      } else {
+        this.nextElementSibling.innerText = '';
+      }
+    } */
+    repswd.onblur = function () {
+      // 获取确认密码数据
+      const repswdValue = this.value;
+      // 获取密码数据
+      const pswdValue = pswd.value;
+      // 判断两次密码是否一致
+      if (repswdValue !== pswdValue) {
+        this.nextElementSibling.innerText = '两次输入的密码不一致';
+      } else {
+        this.nextElementSibling.innerText = '';
+      }
+    }
+    submit.onclick = function (e) {
+      if (!(userFlag && pswdFlag && repswdFlag)) {
+        // e.preventDefault()
+        return false
+      }
+    }
+
+    function blurEvent (Ele, reg, callWord, flag) {
+      Ele.onblur = function() {
+        // 获取输入的数据
+        const value = this.value;
+        // 正则校验
+        // const re = /^[A-Za-z]{6,18}$/.test(value);
+        const re = reg.test(value);
+        // 判断是否符合规则
+        if (!re) {
+          // this.nextElementSibling.innerText = '请输入6~18位的英文字符';
+          this.nextElementSibling.innerText = callWord;
+          flag[Ele.name] = false
+        } else {
+          this.nextElementSibling.innerText = '';
+          flag[Ele.name] = true
+        }
+        console.log(flag)
+      }
+    }
+    blurEvent(username, /^[A-Za-z]{6,18}$/, '请输入6~18位的英文字符', flag);
+    blurEvent(pswd, /^\w{6,18}$/, '请输入6~18位的数字、字母或下划线', flag);
+  </script>
+</body>
+
+</html>

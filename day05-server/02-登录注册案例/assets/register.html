@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    form{
+      width: 300px;
+      height: 150px;
+      margin: 200px auto;
+      border: 1px solid #bbb;
+    }
+    form label{
+      display: block;
+      width: 260px;
+      margin: 12px auto;
+    }
+    form .register-btn{
+      display: block;
+      margin: 0 auto;
+    }
+  </style>
+</head>
+
+<body>
+  <form action="http://localhost:5000/register" method="POST">
+    <label>
+      <span>用 户 名：</span><input type="text" name="username" autofocus required />
+    </label>
+    <label>
+      <span>密　　码：</span><input type="password" name="password" required />
+    </label>
+    <label>
+      <span>确认密码：</span><input type="password" name="repassword" required />
+    </label>
+    <input class="register-btn" type="submit" value="注册">
+  </form>
+</body>
+
+</html>
