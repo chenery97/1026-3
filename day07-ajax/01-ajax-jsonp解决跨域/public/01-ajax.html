@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <button>button</button>
+  <script>
+    const btn = document.querySelector('button');
+    // 从函数中获取服务器响应的数据
+    function fn (data) {
+      console.log(data)
+    }
+    // 点击按钮，创建一个script标签，并设置src属性，通过把script标签添加到页面中浏览器进行渲染会通过get方式访问src中的地址
+    btn.onclick = function () {
+      const scriptNode = document.createElement('script');
+      scriptNode.src = 'http://localhost:5000/test?callback=fn';
+      document.body.appendChild(scriptNode);
+
+      // 不同源请求，出现跨域问题
+      /* const xhr = new XMLHttpRequest();
+      xhr.open('post', 'http://localhost:5000/test');
+      xhr.setRequestHeader('content-type', 'application/x-www-form-urlencoded');
+      xhr.send('{name: "chenery"}');
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) {
+          if (xhr.status === 200) {
+            console.log(xhr.responseText);
+          }
+        }
+      } */
+    }
+  </script>
+</body>
+
+</html>

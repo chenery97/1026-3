@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <!-- <form action="" enctype="application/x-www-form-urlencoded"></form> -->
+  <script>
+    // 1.创建xhr对象
+    const xhr = new XMLHttpRequest();
+    // 2.设置请求行
+    xhr.open('POST', 'http://localhost:5000/ajax-post');
+    // 3.设置请求头
+    xhr.setRequestHeader('content-type', 'application/x-www-form-urlencoded');
+    // 4.设置请求体并发送请求
+    xhr.send('username=zhangsan');
+    // 5.绑定改变状态的事件
+    xhr.onreadystatechange = function () {
+      // 判断状态是否完成响应
+      if (xhr.readyState === 4) {
+        // 判断响应状态是否成功
+        if (xhr.status === 200) {
+          // 获取响应信息
+          console.log(xhr.getAllResponseHeaders());
+          console.log(xhr.getResponseHeader('content-type'));
+          console.log(xhr.responseText);
+        }
+      }
+    }
+  </script>
+</body>
+
+</html>

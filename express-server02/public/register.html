@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    form input+span {
+      color: red;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>注册页面</h1>
+  <form action="http://localhost:5000/register" method="POST">
+    账　　号：<input type="text" name="username" autofocus />&nbsp;<span></span><br />
+    密　　码：<input type="password" name="password" />&nbsp;<span></span><br />
+    确认密码：<input type="password" name="repassword">&nbsp;<span></span><br />
+    <input type="submit" value="注册">
+  </form>
+
+  <script>
+    window.onload = function () {
+      // 获取元素
+      const username = document.querySelector('input[name=username]');
+      const password = document.querySelector('input[name=password]');
+      const repassword = document.querySelector('input[name=repassword]');
+      const submit = document.querySelector('input[type=submit]');
+
+      // 定义规则
+      const flag = {
+        'username': false,
+        'password': false
+      };
+      let repswdFlag = false;
+      const usernameReg = /^[A-Za-z]{6,18}$/;
+      const passwordReg = /^\w{6,18}$/;
+      const usernameMsg = '请输入6~18位的英文字母';
+      const passwordMsg = '请输入6~18位的数字、英文字母或下划线';
+
+      // 获取账号输入框的内容
+      let beforUsername = username.value.trim();
+      // 初始化渲染页面时如果账号不为空则状态为true
+      if (beforUsername) {
+        flag.username = true;
+      }
+      // 绑定表单项的blur事件 
+      function blurEvent(Ele, reg, msg, flag) {
+        Ele.onblur = function () {
+          // 获取表单中的内容
+          const value = this.value.trim();
+          // 匹配正则
+          const re = reg.test(value);
+          // 判断是否符合表单项的规则
+          if (!re) {
+            this.nextElementSibling.innerText = msg;
+            flag[this.name] = false;
+          } else {
+            if (this.name === 'password') {
+              this.nextElementSibling.innerText = '';
+            }
+            flag[this.name] = true;
+          }
+          // 判断密码和确认密码是否相同
+          if (this.name === 'password') {
+            if (repassword.value && repassword.value !== value) {
+              repassword.nextElementSibling.innerText = '两次输入的密码不一致';
+              repswdFlag = false;
+            } else if (repassword.value && repassword.value === value) {
+              repassword.nextElementSibling.innerText = '';
+              repswdFlag = true;
+            }
+            // 如果当前的元素是用户名，则调用检测用户名的方法
+          } else if (this.name === 'username') {
+            userCheck(this, value, re);
+          }
+        }
+      }
+      // 检测用户名是否可用
+      function userCheck(Ele, value, re) {
+        // 如果当前的用户名和失去焦点前的用户名一样或者是当前的用户名不符合规则则不发生ajax请求
+        if (beforUsername === value || !re) {
+          return
+        }
+        // 如果符合，则创建一个xhr对象
+        const xhr = new XMLHttpRequest();
+        // 设置请求行
+        xhr.open('POST', 'http://localhost:5000/userCheck');
+        // 设置请求头
+        xhr.setRequestHeader('content-type', 'application/x-www-form-urlencoded');
+        // 设置请求体并发送请求
+        xhr.send('username=' + value)
+        // 注册响应状态事件
+        xhr.onreadystatechange = function () {
+          // 判断响应是否完成
+          if (xhr.readyState === 4) {
+            // 判断响应是否成功
+            if (xhr.status === 200) {
+              // 获取响应信息，后台返回json字符串，使用JSON.parse解析成对象
+              const re = JSON.parse(xhr.responseText);
+              // 获取用户名元素的兄弟span元素
+              const span = Ele.nextElementSibling;
+              // 给span元素的文本内容设置为服务器响应的msg内容
+              span.innerText = re.msg;
+              // 判断响应信息中的状态码，跟进状态码设置样式和修改标记
+              switch (re.code) {
+                case 10000:
+                  span.style.color = 'lightgreen';
+                  flag[Ele.name] = true;
+                  break;
+                case 11000:
+                  span.style.color = 'red';
+                  flag[Ele.name] = false;
+              }
+            }
+          }
+        }
+      }
+      username.onfocus = function () {
+        beforUsername = this.value.trim();
+      }
+      blurEvent(username, usernameReg, usernameMsg, flag);
+      blurEvent(password, passwordReg, passwordMsg, flag);
+      repassword.onblur = function () {
+        // 获取密码框输入的内容
+        const pswdValue = password.value.trim();
+        // 获取确认密码框输入的内容
+        const repswdVlaue = this.value.trim();
+        // 判断两次输入的密码是否一致
+        if (pswdValue !== repswdVlaue) {
+          this.nextElementSibling.innerText = '两次输入的密码不一致';
+          repswdFlag = false;
+        } else {
+          this.nextElementSibling.innerText = '';
+          repswdFlag = true;
+        }
+      }
+
+
+      // 绑定提交按钮的点击事件
+      submit.onclick = function () {
+        // 如果表单项中有一个不符合规则，则不能提交表单
+        if (!(flag.username && flag.password && repswdFlag)) return false
+      }
+    }
+  </script>
+</body>
+
+</html>

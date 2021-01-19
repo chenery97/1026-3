@@ -1,6 +1,6 @@
 ## Node.js
 
-#### Node.js简介
+### Node.js简介
 
 1. 什么是node.js
 
@@ -22,7 +22,7 @@
 
 
 
-#### CommonJS模块化
+### CommonJS模块化
 
 1. 导入
 
@@ -48,7 +48,7 @@
 
 
 
-#### Node.js函数
+### Node.js函数
 
 1. 在node.js中，所有的模块（js文件），都被自动包裹了一个外层函数
 
@@ -71,7 +71,7 @@ __注__：arguments.callee.toString() 在函数内部执行，用于查看当前
 
 
 
-#### Node.js的事件轮询机制
+### Node.js的事件轮询机制
 
 ![image-20210111184126422](C:\Users\86166\AppData\Roaming\Typora\typora-user-images\image-20210111184126422.png)
 
@@ -93,7 +93,7 @@ __特殊__：process.nextTick()，能在任意阶段优先被执行
 
 
 
-#### 包和包管理器
+### 包和包管理器
 
 1. 什么是包？
 
@@ -125,7 +125,7 @@ __特殊__：process.nextTick()，能在任意阶段优先被执行
 
 
 
-#### Buffer
+### Buffer
 
 1. 什么是Buffer？
    - 它是一个类数组的对象，用于存储数据（存储的全部是二进制数据）
@@ -134,7 +134,7 @@ __特殊__：process.nextTick()，能在任意阶段优先被执行
 
 
 
-#### 文件系统模块
+### 文件系统模块
 
 1. 导入文件系统模块
 
@@ -197,7 +197,7 @@ __特殊__：process.nextTick()，能在任意阶段优先被执行
 
 
 
-#### MongoDB
+### MongoDB
 
 1. 什么是MongoDB？
 
@@ -381,7 +381,7 @@ __特殊__：process.nextTick()，能在任意阶段优先被执行
 
 
 
-#### mongoose
+### mongoose
 
 1. 什么是mongoose？
 
@@ -438,7 +438,7 @@ __特殊__：process.nextTick()，能在任意阶段优先被执行
 
 
 
-#### Node.js原生服务器搭建
+### Node.js原生服务器搭建
 
 1. 引入http模块：`const http = require('http')`
 
@@ -457,23 +457,23 @@ __特殊__：process.nextTick()，能在任意阶段优先被执行
 
 
 
-#### express服务器搭建
+### express服务器搭建
 
 express主要由路由和中间件组成
 
 1. 使用
 
-   1. 下载`npm i express`
+   1. 下载 `npm i express`
 
-   2. 引入`const express = require('express')`
+   2. 引入 `const express = require('express')`
 
-   3. 创建应用对象`const app = express()`
+   3. 创建应用对象 `const app = express()`
 
-   4. 启动服务器`app.listen(端口号, 回调)`
+   4. 启动服务器 `app.listen(端口号, 回调)`
 
    5. 定义路由
 
-      路由：指的是应用程序如何响应客户端的从不同url发送过来的请求
+      路由：指的是应用程序如何响应客户端的从不同路径发送过来的请求
 
       路由参数：在url中的路径后面使用`/:参数名?`，客户端请求时会进行匹配，加了?号是代表可选，客户端可以不传，不加?号则代表是必传的，不传则报404。
 
@@ -501,7 +501,7 @@ express主要由路由和中间件组成
         - get()：获取请求头中某个属性的值
       - response（响应对象）
         - send()：响应给客户端的数据，传递的是字符串
-        - sendFile()：响应给客户端的数据，传递的是一个文件的绝对路径，如果文件没有后缀，则浏览器会下载该文件
+        - sendFile()：响应给客户端的数据，传递的是一个文件的绝对路径，如果文件不能被浏览器识别，则浏览器会下载该文件
         - download()：响应给客户端的数据，传递的是一个文件的相对或绝对路径，浏览器会下载该文件
         - redirect()：响应给客户端的数据，传递的是一个url地址，浏览器会重定向请求该url地址
         - set()：给响应头设置一个属性，必须在响应前设置，否则无效
@@ -515,17 +515,21 @@ express主要由路由和中间件组成
 
       ```js
       //自己定义的
+      const express = require('express')
+      const app = express()
       function xxxMiddleWare(request, response, next) {
           ...
       }
-      app.user(xxxMiddleWare)
+      app.use(xxxMiddleWare)
       //或
       app.get('/index', xxxMiddleWare, (request, response) => {
           ...
       })
           
       //第三方的
-      const bodyParser = require('body-parser');
+      const express = require('express')
+      const app = express()
+      const bodyParser = require('body-parser')
       app.use(bodyParser.urlencoded({extended: true}))
       //或
       app.post('/index', bodyParser.urlencoded({extended: true}), (request, response) => {
@@ -533,11 +537,27 @@ express主要由路由和中间件组成
       })
       
       //内置的
+      const express = require('express')
+      const app = express()
       app.use(express.urlencoded({extended: true}))
       //或
       app.post('/index', express.urlencoded({extended: true}), (request, response) => {
           ...
       })
+      
+      //路由器的
+      /* loginRouter.js */
+      const express = require('express')
+      const router = express.Router()
+      const app = express()
+      router.app('/index', (request, response) => {
+          ...
+      })
+      module.exports = router
+          
+      /* server.js */
+      const router = require('...loginRouter.js')
+      app.use(router)
       
       /*
       	使用use()方法会在所有路由中使用中间件
@@ -545,12 +565,72 @@ express主要由路由和中间件组成
       	在all()方法中单独使用，中间件只会在当前指定的路径的路由执行
       */
       ```
-
+      
       __注__：中间件中的request和response对象和 get / post / all 方法中的回调函数的request和response是同一个对象，所以在中间件中对这两个对象的成员进行修改或扩展，都会影响到回调中的这两个对象
 
+   7. 静态资源服务器
+   
+      ```js
+      const express = require('express')
+      //创建应用对象
+      const app = express()
+      //使用express中的static中间件
+      app.use(express.static('静态资源目录'))
+      //启动服务器
+      app.listen(5000, err => {
+          ...
+      })
+      ```
 
 
-#### HTTP协议
+
+### ejs
+
+1. 什么是ejs
+
+   ejs是node中的一种视图引擎模板，用于后台渲染页面
+
+2. 使用
+
+   1. 下载 `npm i ejs`
+
+   2. 配置
+      - `app.set('view engine', 'ejs')`
+      - `app.set('views', '模板所在目录路径')`
+      
+   3. 模板
+
+      - ejs文件
+
+      - 单纯的js代码，不会被渲染：`<% js代码 %>`在node.js中运行的js代码
+
+      - 根据变量动态渲染：`<%- 占位符(变量) %>`会解析html标签、`<%= 占位符(变量) %>`不会解析html标签
+
+      - 根据条件语句动态渲染：
+
+        ```ejs
+        <% if (条件) { %>
+        	<h1><%= 渲染的数据 %></h1>
+        <% } else { %>
+        	<h1><%= 渲染的数据 %></h1>
+        <% } %>
+        ```
+
+      - 根据列表动态渲染：
+
+        ```ejs
+        <ul>
+        	<% for (let i = 0; i < 10; i++) {%>
+            	<li><%= i++ %></li>
+            <% } %>
+        </ul>
+        ```
+
+   4. 服务器响应渲染 `response.render('模板文件名称', {ejs文件中的占位符(变量): 要渲染的数据})`
+
+
+
+### HTTP协议
 
 1. 什么是HTTP协议
 
@@ -603,3 +683,79 @@ express主要由路由和中间件组成
    - 304：资源未被修改，使用缓存的数据
    - 404：请求的资源找不到，客户端错误
    - 500：请求失败，服务端错误
+
+
+
+### 会话控制
+
+由于HTTP协议是无状态的协议，它无法区分多次请求是否发送自同一客户端，所以服务端需要记录用户的状态时，需要通过会话控制来解决该问题。
+
+### cookie
+
+1. 什么是cookie？
+
+   客户端向服务器发送请求，如果服务器需要记录该用户的状态，就在响应的时候颁发一个cookie，浏览器收到以后会自动将cookie保存，浏览器再次访问服务器时，会把cookie从请求头中带给服务器，服务器就可以通过浏览器带过来的cookie来辨认用户的状态
+
+2. 使用
+
+   - 下载 `npm i cookie-parser`
+   - 引入 `const cookieParser = require('cookie-parser')`
+   - 使用中间件 `app.use(cookieParser())`
+   - 响应给浏览器 `response.cookie(key, value, cookie有效期(单位毫秒))`
+
+
+
+### session
+
+1. 什么是session？
+
+   session是一个对象， 存储特定用户会话所需的属性及配置信息。
+
+   我们可以在服务器中为每一个会话创建一个对象，然后每个对象都设置一个唯一的id，并将该id以cookie的形式发送给浏览器，然后将会话中产生的数据统一保存到这个对象中，这样我们就可以将用户的数据全都保存都服务器中，而不需要保存到客户端，客户端只需要保存一个id即可
+
+2. 使用
+
+   - 下载 `npm i express-session connect-mongo`，需要将session保存到MongoDB中，所以要下载connect-mongo
+
+   - 引入 `const session = require('express-session')`
+
+   - 配置express-session默认的持久化仓库 `const MongoStore = require('connect-mongo')(session)`
+
+   - 设置中间件
+
+     ```js
+     app.use(session({
+       name: 'id',   //设置cookie的name，默认值是：connect.sid
+       secret: 'xxx', //参与加密的字符串（又称签名）
+       saveUninitialized: false, //是否为每次请求都设置一个cookie用来存储session的id
+       resave: true ,//是否在每次请求时重新保存session
+       store: new MongoStore({
+         url: 'mongodb://localhost:27017/test-app',
+         touchAfter: 24 * 3600 // 24小时之内只修改一次
+       }),
+       cookie: {
+         httpOnly: true, // 开启后前端无法通过 JS 操作
+         maxAge: 1000*30 // 这一条 是控制 sessionID 的过期时间的！！！
+       },
+     }))
+     ```
+
+
+
+### cookie和session的区别
+
+1. 存储的位置
+   - cookie：存储在客户端，临时文件中
+   - session：存储在服务器的内存中
+2. 安全性
+   - cookie：是以明文的方式存放在客户端的，安全性低，可以通过一个加密算法进行加密后存放
+   - session：存放在服务器的内存中，所以会比cookie安全
+3. 网络传输量
+   - cookie：用户的数据存放到cookie中，每次在该站点下发送请求都会传递给服务器
+   - session：在客户端中只存放了一个id，其他数据存放在服务器中，所以数据量会较小
+4. 生命周期：
+   - cookie：cookie的生命周期是累计的，从创建时，就开始计时，当客户端重新请求时，不会重新计时
+   - session：session的生命周期是间隔的，在session被销毁前，客户端重新请求，会重新计时
+5. 存储的大小
+   - cookie：保存的数据不能超过4kb，大多数浏览器都限制一个站点最多保存50个cookie
+   - session：保存的数据理论上没有大小限制

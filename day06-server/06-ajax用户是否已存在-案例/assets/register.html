@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    form input+span{
+      color: red;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>注册页面</h1>
+  <form action="/register" method="POST">
+    用户名：<input type="text" name="p_name"><span></span><br>
+    密码：<input type="password" name="p_password"><span></span><br>
+    确认密码：<input type="password" name="repassword"><span></span><br>
+    性别：<input type="radio" name="p_gender" value="male" checked>男
+    <input type="radio" name="p_gender" value="female">女
+    <br>
+    <input type="submit" value="注册">
+  </form>
+
+  <script>
+    // 获取元素
+    const nameNode = document.querySelector('input[name=p_name]');
+    const pswdNode = document.querySelector('input[name=p_password]');
+    const repswdNode = document.querySelector('input[name=repassword]');
+    const submit = document.querySelector('input[type=submit]');
+
+    let repswdFlag = false;
+    const flag = {p_name: false, p_password: false};
+    const nameReg = /^[A-Za-z]{6,18}$/;
+    const nameMsg = '请输入6~18位的英文字符';
+    const pswdReg = /^\w{6,18}$/;
+    const pswdMsg = '请输入6~18位的数字、字母后下划线';
+
+    // 判断输入的内容是否符合需求
+    function blurEvent(Ele, reg, msg, flag) {
+      Ele.onblur = function () {
+        const value = this.value;
+        const re = reg.test(value);
+        if (!re) {
+          this.nextElementSibling.innerText = msg;
+          flag[this.name] = false;
+        } else {
+          this.nextElementSibling.innerText = '';
+          flag[this.name] = true;
+          // 判断当前触发的表单是否为用户名的表单
+          if (this.name === 'p_name') {
+            // 创建xhr对象
+            const xhr = new XMLHttpRequest();
+            // 设置请求行
+            xhr.open('POST', 'http://localhost:5000/userSearch');
+            // 设置请求头
+            xhr.setRequestHeader('content-type', 'application/x-www-form-urlencoded');
+            // 设置请求体并发送请求
+            xhr.send('p_name=' + this.value);
+            // 注册xhr请求状态改变的事件
+            xhr.onreadystatechange = function () {
+              // 判断请求是否响应完成
+              if (xhr.readyState === 4) {
+                // 判断响应是否成功
+                if (xhr.status === 200) {
+                  // 获取服务器响应的数据，解析成js对象
+                  const re = JSON.parse(xhr.responseText);
+                  // 设置用户名表单的提示语
+                  Ele.nextElementSibling.innerText = re.msg;
+                  // 判断服务器响应数据中的状态码
+                  // 如果为11000，则用户已被使用，不能再次注册
+                  if (re.code === 11000) {
+                    Ele.nextElementSibling.style.color = 'red';
+                    flag[Ele.name] = false;
+                    // 如果为10000，则用户未必使用，可以注册
+                  } else if(re.code === 10000) {
+                    Ele.nextElementSibling.style.color = 'green';
+                    flag[Ele.name] = true;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    blurEvent(nameNode, nameReg, nameMsg, flag);
+    blurEvent(pswdNode, pswdReg, pswdMsg, flag);
+    repswdNode.onblur = function () {
+      const password = pswdNode.value;
+      const repassword = this.value;
+      if (password !== repassword) {
+        this.nextElementSibling.innerText = '两次输入的密码不一致';
+        repswdFlag = false;
+      } else {
+        this.nextElementSibling.innerText = '';
+        repswdFlag = true;
+      }
+    }
+    submit.onclick = function () {
+      if (!(repswdFlag && flag['p_name'] && flag['p_password'])) return false
+    }
+    
+  </script>
+</body>
+
+</html>

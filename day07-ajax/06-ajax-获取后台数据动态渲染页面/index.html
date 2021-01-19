@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <button id="btn">获取数据</button>
+  <ul>
+    <!-- <li>
+      <h3>name</h3>
+      <span>gender</span>
+      <p>info</p>
+    </li> -->
+  </ul>
+
+  <script>
+    // 在全局作用域中声明了这个函数，所以当script标签解析执行时会调用这个函数，形参接收到了服务器传递过来的实参，也就是最后服务器想响应给客户端的数据
+    function getUsersData(data) {
+      // 初始化字符串
+      let str = '';
+      // 遍历后台响应回来的数据
+      data.forEach(item => {
+        // 按照html标签模板拼接字符串
+        str += `<li>
+          <h3>${item.name}</h3>
+          <span>${item.gender}</span>
+          <p>${item.info}</p>
+        </li>`;
+      })
+      // 遍历完设置给ul标签的innerHTML
+      ul.innerHTML = str;
+    }
+    // 获取元素
+    const btn = document.getElementById('btn');
+    const ul = document.querySelector('ul');
+    // 给按钮绑定点击事件
+    btn.onclick = function () {
+      // 创建script标签
+      const script = document.createElement('script');
+      // 给script标签添加src属性，最后浏览器在渲染这个script标签时，会把后台响应回来的数据解析成js中的函数进行执行
+      script.src = 'http://localhost:5000/usersData?callback=getUsersData'
+      // 将script标签添加到body的结束标签前面
+      document.body.appendChild(script);
+    }
+  </script>
+</body>
+
+</html>

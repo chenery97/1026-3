@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    form input+span{
+      color: red;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>登录页面</h1>
+  <form action="http://localhost:5000/login" method="POST">
+    账　　号：<input type="text" name="username" /> <span></span> <br />
+    密　　码：<input type="password" name="password" /> <span></span> <br />
+    <input type="submit" value="登录">
+  </form>
+
+  <script>
+    window.onload = function () {
+      // 获取元素
+      const username = document.querySelector('input[name=username]');
+      const password = document.querySelector('input[name=password]');
+      const submit = document.querySelector('input[type=submit]');
+
+      // 定义规则
+      const flag = {
+        username: false,
+        password: false
+      };
+      const usernameReg = /^[A-Za-z]{6,18}$/;
+      const passwordReg = /^\w{6,18}$/;
+      const usernameMsg = '请输入6~18位的英文字母';
+      const passwordMsg = '请输入6~18位的数字、英文字母或下划线';
+
+      // 初始化渲染页面时如果账号不为空则状态为true
+      if (username.value.trim()) {
+        flag.username = true;
+      }
+      // 绑定表单项的blur事件 
+      function blurEvent(Ele, reg, msg, flag) {
+        Ele.onblur = function () {
+          // 获取表单中的内容
+          const value = this.value.trim();
+          // 匹配正则
+          const re = reg.test(value);
+          // 判断是否符合表单项的规则
+          if (!re) {
+            this.nextElementSibling.innerText = msg;
+            flag[this.name] = false;
+          } else {
+            this.nextElementSibling.innerText = '';
+            flag[this.name] = true;
+          }
+        }
+      }
+      
+      blurEvent(username, usernameReg, usernameMsg, flag);
+      blurEvent(password, passwordReg, passwordMsg, flag);
+
+      // 绑定提交按钮的点击事件
+      submit.onclick = function () {
+        // 如果表单项中有一个不符合规则，则不能提交表单
+        if (!(flag.username && flag.password)) return false
+      }
+    }
+  </script>
+</body>
+
+</html>

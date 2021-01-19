@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <button>button</button>
+
+  <script src="../../jquery.js"></script>
+  <script>
+    $('button').on('click', function () {
+      // 发送ajax请求
+      $.ajax({
+        // 设置请求的方式
+        type: 'get',
+        // 设置请求的url地址
+        url: 'http://localhost:5000/test',
+        // 设置请求数据
+        data: {
+          name: 'chenery'
+        },
+        // 响应数据的类型
+        dataType: 'jsonp',
+        // 发送请求之前执行
+        beforeSend() {},
+        // 响应状态成功执行
+        success (data) {
+          console.log(data);
+        },
+        // 响应状态失败执行
+        error (xhr) {
+          console.log(xhr);
+        },
+      })
+    })
+  </script>
+</body>
+
+</html>

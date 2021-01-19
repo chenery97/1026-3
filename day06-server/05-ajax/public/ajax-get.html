@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    /* get请求 */
+    // 1.创建xhr对象
+    const xhr = new XMLHttpRequest();
+    // 2.设置请求行
+    console.log('open调用之前', xhr.readyState);
+    xhr.open('GET', 'http://localhost:5000/ajax-get?username=chenery');
+    console.log('open调用之后', xhr.readyState);
+    // 3.get请求不需要设置请求头
+    // 4.设置请求主数据，并发送请求，get请求不需要设置请求体数据
+    xhr.send(null)
+    // 5.注册xhr对象的状态改变事件
+    xhr.onreadystatechange = function () {
+      console.log(xhr.readyState);
+      // 判断xhr的readyState状态
+      if (xhr.readyState === 4) {
+        // 判断是否响应成功
+        if (xhr.status === 200) {
+          // 获取响应信息
+          console.log(xhr.getAllResponseHeaders()); // 获取响应头所有数据
+          console.log(xhr.getResponseHeader('content-type')); // 获取指定响应头的属性值
+          console.log(xhr.responseText); // 获取响应主体的信息，是个字符串
+        }
+      }
+    }
+  </script>
+</body>
+
+</html>

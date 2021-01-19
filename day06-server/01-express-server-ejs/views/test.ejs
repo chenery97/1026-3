@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <!-- ejs模板使用一：= 和 - -->
+  <% const msg = 'Hello EJS' %>
+  <% const aNode = '<a href="http://localhost:5000/login">Hello EJS</a>' %>
+  <h1><%= msg %></h1>
+  <p><%- aNode %></p>
+
+  <!-- ejs模板使用二：条件渲染 -->
+  <% const number = Math.floor(Math.random() * 100) %>
+  <% if (number < 50) { %>
+    <h1><%= number %> &lt; 50</h1>
+  <% } else { %>
+    <h1><%= number %> &gt; 50</h1>
+  <%} %>
+
+  <!-- ejs模板使用三：列表渲染 -->
+  <ul>
+    <% for (let i = 0; i < 10; i++) { %>
+      <li><%= i++ %></li>
+    <% } %>
+  </ul>
+</body>
+
+</html>

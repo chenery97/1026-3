@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    form input+span{
+      color: red;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>登录页面</h1>
+  <form action="/login" method="POST">
+    用户名：<input type="text" name="p_name"><span></span><br>
+    密码：<input type="password" name="p_password"><span></span><br>
+    <br>
+    <input type="submit" value="登录">
+  </form>
+
+  <script>
+    // 获取元素
+    const nameNode = document.querySelector('input[name=p_name]');
+    const pswdNode = document.querySelector('input[name=p_password]');
+    const submit = document.querySelector('input[type=submit]');
+
+    const flag = {
+      p_name: false,
+      p_password: false
+    };
+    const nameReg = /^[A-Za-z]{6,18}$/;
+    const nameMsg = '请输入6~18位的英文字符';
+    const pswdReg = /^\w{6,18}$/;
+    const pswdMsg = '请输入6~18位的数字、字母后下划线';
+
+    // 判断输入的内容是否符合需求
+    function blurEvent(Ele, reg, msg, flag) {
+      Ele.onblur = function () {
+        const value = this.value;
+        const re = reg.test(value);
+        if (!re) {
+          this.nextElementSibling.innerText = msg;
+          flag[this.name] = false;
+        } else {
+          this.nextElementSibling.innerText = '';
+          flag[this.name] = true;
+        }
+      }
+    }
+
+    blurEvent(nameNode, nameReg, nameMsg, flag);
+    blurEvent(pswdNode, pswdReg, pswdMsg, flag);
+    submit.onclick = function () {
+      if (nameReg.test(nameNode.value))flag['p_name'] = true
+      if (!(flag['p_name'] && flag['p_password'])) return false
+    }
+  </script>
+</body>
+
+</html>
