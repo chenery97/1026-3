@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <button id="btn">send request</button>
+
+  <script>
+    // 获取元素
+    const btn = document.getElementById('btn');
+
+    // 绑定事件
+    btn.onclick = function () {
+      // 点击发送请求
+      myAjax({
+        type: 'get',
+        url: 'http://localhost:5000/test',
+        data: {
+          name: 'chenery',
+          age: 23
+        },
+        dataType: 'jsonp',
+        beforeSend () {
+          console.log('发送请求之前执行=======>')
+          // return false
+        },
+        success (data) {
+          console.log('请求成功>>>>>>', data);
+        },
+        error () {
+          console.log('请求失败>>>>>>');
+        },
+        complete () {
+          console.log('响应完成<<<<<<<');
+        }
+      })
+    }
+
+    // 封装模拟jq中的ajax请求
+    function myAjax(options) {
+      // 判断是否传了参数，并且参数是否为对象，不是直接return
+      if (!options || typeof options !== 'object') return
+      // 获取参数
+      // 判断请求方式，如果没传默认为get
+      let {url, type = 'get', data, dataType = 'text', beforeSend, complete, success, error} = options;
+      // 判断是否传了url，没有也直接return
+      if (!url) return
+      
+      // 将参数对象转成字符串
+      let params = objToStr(data);
+      // 根据请求方式，确定参数的传递位置
+      if (type === 'get') {
+        url += '?' + params;
+        // get请求需要把参数拼接到url路径后面，在send的时候就不需要传递了，为了让send能够兼容get和post，所以在这里把参数变量设置为null
+        params = null;
+      }
+      // 判断是否通过jsonp请求
+      if (dataType === 'jsonp') {
+        // 调用函数动态创建script标签，通过src请求，不再执行下面的ajax请求，直接return
+        jsonpRequest(url, jsonpCallBack)
+        return
+      }
+      // 创建xhr对象
+      const xhr = new XMLHttpRequest();
+      // 设置请求行
+      xhr.open(type, url);
+      // 设置请求头
+      type === 'post' && xhr.setRequestHeader('content-type', 'application/x-www-form-urlencoded');
+      // 在发送请求前调用beforeSend，决定要不要继续请求
+      // beforeSend不传默认继续请求，传了没有return 默认也继续请求，return true/false
+      // 定义一个标记
+      let flag = beforeSend && beforeSend() === false ? false : true;
+      // 设置请求体并发送请求，根据标记决定要不要发送请求
+      flag && xhr.send(params);
+      // 响应
+      xhr.onreadystatechange = function () {
+        // 判断响应是否完成
+        if (xhr.readyState === 4) {
+          // 响应完成调用complete函数
+          complete && complete();
+          // 判断响应是否成功
+          if (xhr.status === 200) {
+            // 判断dataType
+            let data = xhr.responseText;
+            // 如果是要求json类型的，把响应的数据解析成js对象
+            if (dataType === 'json') data = JSON.parse(xhr.responseText);
+            // 调用success函数
+            success && success(data);
+          } else {
+            // 调用error函数
+            error && error()
+          }
+        }
+      }
+    }
+
+    function objToStr(data) {
+      // 判断要传递的参数类型是否为对象，不是直接return
+      if (typeof data !== 'object' || Array.isArray(data)) return ''
+      // 定义一个空数组
+      const arr = [];
+      // 遍历传递进来的参数对象
+      for (let key in data) {
+        // 把键值对用=连接起来并添加到数组中
+        arr.push(key + '=' + data[key]);
+      }
+      // 返回数组用&连接每个元素的字符串
+      return arr.join('&')
+    }
+    // jsonp请求
+    function jsonpRequest(url, callback) {
+      const script = document.createElement('script');
+      script.src = url + '&callback=' + callback.name;
+      document.body.appendChild(script);
+    }
+    // 传递给服务器的函数，服务器响应后会执行这个函数
+    function jsonpCallBack(data) {
+      console.log('jsonp请求成功>>>>>>', data)
+    }
+  </script>
+</body>
+
+</html>

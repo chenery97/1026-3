@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <button id="btn">axios send request</button>
+
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script>
+    // 获取元素
+    const btn = document.getElementById('btn');
+
+    // 给按钮绑定点击事件
+    btn.onclick = function () {
+      /* 
+        axios 发送的请求会返回一个promise对象，promise 的状态为请求的结果成功与否
+        axios 发送post请求会有跨域问题，使用第三方包，cors()中间件可以解决axios跨域问题
+        axios 发送post请求响应时Content-Type: application/json; charset=utf-8，而通过后台仍然通过urlencoded去解析，
+              所以数据解析不出来，使用express.json()中间件可以解决该问题
+      */
+      // 使用axios发送get请求，返回一个promise对象，状态为请求的结果请求成功为fulfilled，失败为rejected
+      const getResult = axios.get('http://localhost:5000/test?username=chenery&age=23')
+      console.log('axios.get =====>', getResult)
+
+      // 使用axios发送post请求
+      const postResult = axios.post('http://localhost:5000/test', {
+        name: 'james',
+        age: 40
+      })
+      console.log('axios.post =====>', postResult)
+
+      // 使用axios发送请求，method不写默认get请求，get请求要上传的参数写在params对象中
+      const re1 = axios({
+        // url: 'http://localhost:5000/test?name=jerry&age=12'
+        url: 'http://localhost:5000/test',
+        params: {
+          name: 'tom',
+          age: 15
+        }
+      })
+      console.log('axios-get =====>', re1)
+      // 使用axios发送post请求，post请求要上传的参数写在data对象中
+      const re2 = axios({
+        url: 'http://localhost:5000/test',
+        method: 'post',
+        data: {
+          name: 'share',
+          age: 22
+        }
+      })
+      console.log('axios-post =====>', re2)
+    }
+  </script>
+</body>
+
+</html>
