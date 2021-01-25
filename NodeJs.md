@@ -29,11 +29,12 @@
    `const module = require(module)`
 
    - 如果是自定义模块，需要传递模块文件的路径
-- 如果是内置模块，直接传递模块名
+   - 如果是内置模块，直接传递模块名
+   
    - 如果是第三方模块，直接传递模块名
-
+   
    __注__：在执行require(module)时，会在当前项目的目录下寻找node_modules这个文件夹，如果找不到则会沿着层级目录往上找，一直找到根盘符，在实际开发中node_modules文件夹都会在当前项目下
-
+   
 2. 导出
 
    内部底层 `exports = module.exports = {}`，CommonJS模块化规范中规定如果module.exports和exports指向了不同的对象，则使用module.exports
@@ -105,15 +106,13 @@ __特殊__：process.nextTick()，能在任意阶段优先被执行
 
 3. npm的使用
 
-   - `npm init / npm init -y`：初始化一个包
-
-     - 初始化成功后会自动生成一个package.json文件
+   - `npm init / npm init -y`：初始化一个包，初始化成功后会自动生成一个package.json文件
 
      __注意__：包名不能是中文、大写字母，还要避免包名冲突
 
    - `npm install / npm i`：安装所有在package.json/package-lock.json中声明的包
 
-   - `npm i packageName`：安装指定包名到当前项目的node_modules文件夹中，并且将该包写入包说明文件（package.json），并添加到生成依赖（dependencies）中
+   - `npm i packageName`：安装指定包名到当前项目的node_modules文件夹中，并且将该包写入包说明文件（package.json），并添加到生产依赖（dependencies）中
 
    - `npm i packageName@x.x.x`：在上面指令的基础上指定了版本
 
@@ -206,12 +205,40 @@ __特殊__：process.nextTick()，能在任意阶段优先被执行
 2. 数据库类型分类
 
    1. 关系型数据库(MySQL、Oracle、SQL Server等)：数据库 --> 表 --> 字段和数据行
-      - 表与表之间有关联
-      - 关系复杂
-      - 适用于大数据量的项目
+
+      优点：
+
+      - 易于维护：都是使用表结构，格式一致
+
+      - 使用方便：1通用，可用于复杂查询
+
+      - 高级查询：可用于一个表以及多个表之间非常复杂的查询
+
+      缺点：
+
+      - 读写性能比较差，尤其是海量数据的高效率读写
+
+      - 有固定的表结构，字段不可随意更改，灵活度稍欠
+
+      - 高并发读写需求，传统关系型数据库来说，硬盘I/O是一个很大的瓶颈
+
    2. 非关系型数据库(MongoDB、Redis等)：数据库 --> 集合 --> 文档（类似json）
-      - 关系简单
-      - 适用于数据量不是特别大的项目
+
+      优点：
+
+      - 格式灵活：存储数据的格式可以是key,value形式。
+
+      - 速度快：nosql可以内存作为载体，而关系型数据库只能使用硬盘；
+
+      - 易用：nosql数据库部署简单。
+
+      缺点：
+
+      - 不支持sql，学习和使用成本较
+
+      - 不支持事务
+
+      - 复杂查询时语句过于繁琐
 
 3. MongoDB的CURD指令
 

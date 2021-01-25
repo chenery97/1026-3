@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <div id="root"></div>
+  <script src="../js/react.development.js"></script>
+  <script src="../js/react-dom.development.js"></script>
+  <script src="../js/babel.min.js"></script>
+
+  <script type="text/babel">
+    const data = [
+      {id: 1, name: 'jack', content: 'hahahhahahahhah'},
+      {id: 2, name: 'tom', content: 'heheheheheheheheh'},
+      {id: 3, name: 'rose', content: 'heieheieheiehiehei'}
+    ]
+    function fn(e){
+      if (e.target.nodeName !== 'A') {
+        console.log(e.target.innerText);
+      }
+      e.preventDefault();
+    }
+    const lis = data.map(item => {
+      return <li key={item.id}>
+        <a href="" onClick={fn}>
+          <h3 style={{color: 'red'}}>{item.name}</h3>
+          <p style={{backgroundColor: 'yellow'}}>{item.content}</p>
+        </a>
+      </li>
+    })
+    const div = <div>
+        {data.length ? <ul>{lis}</ul> : <h1>暂无数据</h1>}
+      </div>
+    ReactDOM.render(div, document.getElementById('root'));
+  </script>
+</body>
+
+</html>
