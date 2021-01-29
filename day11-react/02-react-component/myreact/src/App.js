@@ -1,16 +1,19 @@
 import React, { Component } from 'react'
-import Position from './Position'
-import Cat from './components/Cat'
-import Mouse from './components/Mouse'
+import withForm from './withForm'
+import Login from './pages/Login'
+import Register from './pages/Register'
+
+const WithLogin = withForm(Login)
+const WithRegister = withForm(Register)
 
 export default class App extends Component {
   render() {
     return (
-      <div>
-        <h1>猫抓老鼠</h1>
-        <Position >{data => <Mouse state={data} />}</Position>
-        <Position >{data => <Cat state={data} />}</Position>
-      </div>
+      <React.Fragment>
+        <h1>高阶组件</h1>
+        <WithLogin></WithLogin>
+        <WithRegister></WithRegister>
+      </React.Fragment>
     )
   }
 }
