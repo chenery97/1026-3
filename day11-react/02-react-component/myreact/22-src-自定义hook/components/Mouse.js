@@ -1,8 +1,9 @@
 import React from 'react'
 import MouseUrl from '../assets/mouse.gif'
+import position from '../position'
 
-export default function Mouse(props) {
-  let { x, y } = props.state
+export default function Mouse() {
+  const {x, y} = position()
   return (
     <div>
       <img

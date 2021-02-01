@@ -1,18 +1,13 @@
+// 自定义hook
 import { useState, useEffect } from 'react'
-
-export default function Position(props) {
+// 自定义hook函数名要使用use开头
+export default function usePosition() {
   const [x, setX] = useState(0)
   const [y, setY] = useState(0)
-
-  const state = {
-    x,
-    y
-  }
 
   function mousemoveHandle(e) {
     setX(e.clientX)
     setY(e.clientY)
-    console.log(e.clientX, e.clientY)
   }
 
   useEffect(() => {
@@ -24,6 +19,6 @@ export default function Position(props) {
     }
   }, [])
 
-  return props.render(state)
+  return {x, y}
 
 }
