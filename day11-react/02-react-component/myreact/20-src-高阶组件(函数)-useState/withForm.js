@@ -25,5 +25,3 @@ export default function withForm(MyComponent) {
     )
   }
 }
-
-withForm.displayName = 'withLogin'
