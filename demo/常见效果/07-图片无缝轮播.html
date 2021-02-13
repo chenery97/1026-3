@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    .outer {
+      margin: 200px auto;
+      width: 500px;
+      height: 300px;
+      border: 1px solid red;
+    }
+
+    .inner {
+      width: 100%;
+      height: 100%;
+      font-size: 0;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .inner ul.banner {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      position: absolute;
+    }
+
+    .inner ul.banner li {
+      float: left;
+    }
+
+    .inner ul.banner li img {
+      width: 500px;
+      height: 300px;
+    }
+
+    .inner button {
+      width: 50px;
+      height: 100px;
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 50px;
+      background-color: transparent;
+      outline: none;
+      border: none;
+      color: rgba(255, 255, 255, .5);
+      cursor: pointer;
+    }
+
+    .inner button:hover {
+      color: rgba(255, 255, 255, .7);
+    }
+
+    .inner button.prev {
+      left: 10px;
+    }
+
+    .inner button.next {
+      right: 10px;
+    }
+
+    .inner ul.point {
+      position: absolute;
+      left: 50%;
+      bottom: 20px;
+      transform: translateX(-50%);
+      display: flex;
+    }
+
+    .inner ul.point li {
+      margin: 0 5px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background-color: rgba(255, 255, 255, .5);
+      cursor: pointer;
+    }
+
+    .inner ul.point li.active {
+      background-color: rgba(255, 255, 255, .8);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="outer">
+    <div class="inner">
+      <ul class="banner">
+        <li>
+          <img src="./images/56af0da3ae601.jpg" alt="">
+        </li>
+        <li>
+          <img src="./images/5710984334b7e.jpg" alt="">
+        </li>
+        <li>
+          <img src="./images/5ba44d4304441.jpg" alt="">
+        </li>
+        <li>
+          <img src="./images/5cb450ae20929.jpg" alt="">
+        </li>
+        <li>
+          <img src="./images/F8F2-fxipenp2527999.jpg" alt="">
+        </li>
+        <li>
+          <img src="./images/56af0da3ae601.jpg" alt="">
+        </li>
+      </ul>
+      <button type="button" class="prev">&lt;</button>
+      <button type="button" class="next">&gt;</button>
+    </div>
+  </div>
+
+  <script>
+    // 获取元素
+    const oInner = document.querySelector('.inner')
+    const oUl = document.querySelector('ul.banner')
+    const oLis = document.querySelectorAll('ul.banner li')
+    const oImages = document.querySelectorAll('ul.banner li img')
+    const oPrev = document.querySelector('button.prev')
+    const oNext = document.querySelector('button.next')
+
+    let timeoutTimer = null
+    let moveTimer = null
+    let autoTimer = null
+
+    oUl.style.width = oLis[0].offsetWidth * oLis.length + 'px'
+    // 根据图片数量生成对应的导航点
+    const oPoint = document.createElement('ul')
+    oPoint.classList.add('point')
+    oLis.forEach((item, index) => {
+      if (index === oLis.length - 1) return
+      const newLi = document.createElement('li')
+      if (index === 0) newLi.classList.add('active')
+      oPoint.appendChild(newLi)
+    })
+    oInner.appendChild(oPoint)
+    const oPointLis = document.querySelectorAll('.inner ul.point li')
+
+    let currentIndex = 0
+
+    function auto(){
+      autoTimer = setInterval(() => {
+        clearInterval(moveTimer)
+        currentIndex++
+        if (currentIndex >= oLis.length) {
+          currentIndex = 1
+          oUl.style.left = '0px'
+        }
+        move()
+      }, 2000)
+    }
+    auto()
+
+    function timeout() {
+      timeoutTimer = setTimeout(() => {
+        auto()
+      }, 3000)
+    }
+
+    function pointActive() {
+      oPointLis.forEach((item, index) => {
+        if (index === currentIndex) {
+          item.classList.add('active')
+        } else {
+          item.classList.remove('active')
+        }
+      })
+      if (currentIndex === oLis.length - 1) {
+        oPointLis[0].classList.add('active')
+      }
+    }
+    function move() {
+      let startLocation = parseInt(oUl.style.left) || 0
+      const endLocation = -oImages[0].offsetWidth * currentIndex
+      let startStep = 0
+      const endStep = 20
+      const everyStep = (endLocation - startLocation) / (endStep - startStep)
+      moveTimer = setInterval(() => {
+        startStep++
+        if (startStep >= endStep) {
+          clearInterval(moveTimer)
+        }
+        startLocation += everyStep
+        oUl.style.left = startLocation + 'px'
+      })
+      pointActive()
+    }
+
+    oNext.onclick = function () {
+      clearTimeout(timeoutTimer)
+      clearInterval(autoTimer)
+      clearInterval(moveTimer)
+      currentIndex++
+      if (currentIndex >= oLis.length) {
+        currentIndex = 1
+        oUl.style.left = '0px'
+      }
+      move()
+      timeout()
+    }
+    oPrev.onclick = function () {
+      clearTimeout(timeoutTimer)
+      clearInterval(autoTimer)
+      clearInterval(moveTimer)
+      currentIndex--
+      if (currentIndex <= 0) {
+        currentIndex = oLis.length - 1
+        oUl.style.left = -oLis.length * oLis[0].offsetWidth + 'px'
+      }
+      move()
+      timeout()
+    }
+  </script>
+</body>
+
+</html>

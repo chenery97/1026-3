@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    .back-top{
+      position: fixed;
+      right: 50px;
+      bottom: 100px;
+      padding: 10px;
+      border: 1px solid red;
+      background-color: red;
+      color: #fff;
+      cursor: pointer;
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="back-top">回到顶部</div>
+  <div class="content">
+    hello <br>
+    world <br>
+  </div>
+
+  <script>
+    // 获取元素
+    const oContent = document.querySelector('.content')
+    const oBackTop = document.querySelector('.back-top')
+
+    // 生成数据
+    oContent.innerHTML = oContent.innerHTML.repeat(100)
+
+    // 绑定滚轮事件
+    window.onscroll = function () {
+      if ((window.pageYOffset || document.documentElement.scrollTop) >= 200) {
+        oBackTop.style.display = 'block'
+      } else {
+        oBackTop.style.display = 'none'
+      }
+    }
+    // 给back-top绑定点击事件
+    oBackTop.onclick = function () {
+      window.scrollTo(0, 0)
+    }
+  </script>
+</body>
+
+</html>

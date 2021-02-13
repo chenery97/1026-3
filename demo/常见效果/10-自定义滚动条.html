@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    html,body{
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+    .content{
+      position: relative;
+    }
+    .aside {
+      width: 30px;
+      height: 100%;
+      position: fixed;
+      right: 0;
+      top: 0;
+      background-color: #eee;
+    }
+    .bar{
+      width: 100%;
+      height: 100%;
+    }
+    .box{
+      width: 100%;
+      height: 60px;
+      background-color: red;
+      position: absolute;
+    }
+
+  </style>
+</head>
+
+<body>
+  <div class="outer">
+    <div class="content">
+      Hello<br>
+      World<br>
+    </div>
+    <div class="aside">
+      <div class="bar">
+        <div class="box"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const oContent = document.querySelector('.content')
+    const oBar = document.querySelector('.bar')
+    const oBox = document.querySelector('.box')
+
+    // 生成数据
+    oContent.innerHTML = oContent.innerHTML.repeat(100)
+
+    const beforeHT = {
+      height: oBar.clientHeight - oBox.offsetHeight,
+      top: 0
+    }
+
+    // 计算比例
+    let scale = (oContent.offsetHeight - document.documentElement.clientHeight) / (oBar.clientHeight -
+    oBox.offsetHeight)
+    // 检测窗口大小变化
+    window.onresize = function () {
+      scale = (oContent.offsetHeight - document.documentElement.clientHeight) / (oBar.clientHeight -
+      oBox.offsetHeight)
+      // 现在的滑块位置 / 之前的滑块位置 = 现在的滑块剩余可滑动高度 / 之前的滑块剩余可滑动高度
+      const nowLocation = beforeHT.top * ((oBar.clientHeight - oBox.offsetHeight) / beforeHT.height)
+      oBox.style.top = nowLocation + 'px'
+      oContent.style.top = -nowLocation * scale + 'px'
+      beforeHT.height = oBar.clientHeight - oBox.offsetHeight
+      beforeHT.top = nowLocation
+      console.log(beforeHT.top)
+    }
+
+    // 按下滑块
+    oBox.onmousedown = function (e) {
+      const XY = {
+        x: e.offsetX,
+        y: e.offsetY
+      }
+      // 移动滑块
+      document.onmousemove = function (e) {
+        e.preventDefault()
+        let top = e.clientY - XY.y
+        if (top >= oBar.clientHeight - oBox.offsetHeight) {
+          top = oBar.clientHeight - oBox.offsetHeight
+        } else if (top <= 0) {
+          top = 0
+        }
+        const LT = {
+          left: e.clientX - XY.x,
+          top
+        }
+        // const scale = LT.top / (oBar.clientHeight - oBox.offsetHeight)
+        const conmoveTop = LT.top * scale
+        oBox.style.top = LT.top + 'px'
+        oContent.style.top = -conmoveTop + 'px'
+        beforeHT.top = LT.top
+        return false
+      }
+      // 松开滑块
+      document.onmouseup = function (e) {
+        document.onmousemove = null
+        document.onmouseup = null
+      }
+    }
+    // 鼠标滚轮事件
+    document.onmousewheel = function (e) {
+      let y = oBox.offsetTop
+      if (e.wheelDelta > 0) {
+        // 上滚
+        y -= 5
+      } else {
+        // 下滚
+        y += 5
+      }
+      if (y <= 0) y = 0
+      else if (y >= oBar.clientHeight - oBox.offsetHeight) y = oBar.clientHeight - oBox.offsetHeight
+      oBox.style.top = y + 'px'
+      oContent.style.top = -y * scale + 'px'
+      beforeHT.top = y
+      console.log('滑动>>>>', beforeHT.top)
+    }
+  </script>
+</body>
+
+</html>

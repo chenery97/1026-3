@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    .outer{
+      width: 500px;
+      height: 300px;
+      margin: 200px auto;
+      border: 1px solid red;
+    }
+    .title ul{
+      margin: 0;
+      padding: 0;
+      list-style-type: none;
+      height: 50px;
+      line-height: 50px;
+      display: flex;
+      text-align: center;
+      font-size: 20px;
+    }
+    .title ul li{
+      flex: 1;
+      border: 1px solid skyblue;
+      cursor: pointer;
+    }
+    .title ul li.active{
+      background-color: pink;
+    }
+    .content{
+      height: 250px;
+      line-height: 250px;
+      text-align: center;
+      font-size: 50px;
+      overflow: hidden;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="outer">
+    <div class="title">
+      <ul>
+        <li class="active">标题一</li>
+        <li>标题二</li>
+        <li>标题三</li>
+      </ul>
+    </div>
+    <div class="content">
+      <section>内容一</section>
+      <section>内容二</section>
+      <section>内容三</section>
+    </div>
+  </div>
+
+  <script>
+    // 获取元素
+    const oTitles = document.querySelectorAll('.title ul li')
+    const oContent = document.querySelector('.content')
+    const oContents = document.querySelectorAll('.content section')
+
+    // 获取content的高度
+    const contentHeight = oContents[0].offsetHeight
+    // 给oTitle绑定点击事件
+    oTitles.forEach((item, index) => {
+      item.onclick = function () {
+        // 遍历去除所有title的active类名
+        oTitles.forEach(item => {
+          item.classList.remove('active')
+        })
+        // 给当前点击的title添加active类名
+        this.classList.add('active')
+        // 获取当前位置
+        let nowLocation = oContent.scrollTop
+        // 获取目标位置
+        const targetLocation = index * contentHeight
+        const step = nowLocation < targetLocation ? 5 : -5
+        console.log(nowLocation, targetLocation, step)
+        const timer = setInterval(() => {
+          nowLocation += step
+          if (nowLocation >= targetLocation && step > 0 || nowLocation <= targetLocation && step < 0) {
+            nowLocation = targetLocation
+            clearInterval(timer)
+          }
+          oContent.scrollTop = nowLocation
+        })
+      }
+    })
+  </script>
+</body>
+
+</html>

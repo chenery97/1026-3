@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="./02-移动端适配方案二.css">
+</head>
+
+<body>
+  <div></div>
+
+  <script>
+    /* 
+      公式：
+      根元素字体大小 = 当前设备横向独立像素值 / 10
+      属性值 = 设计值 / 设计稿宽度 / 10
+    */
+    // 1.计算根元素的字体大小
+    // 2.需要使用css像素的属性把px换算成rem，使用less的特性计算属性值
+    function setRootFontSize() {
+      const rootFontSize = document.documentElement.clientWidth / 10
+      document.documentElement.style.fontSize = rootFontSize + 'px'
+    }
+    setRootFontSize()
+    window.onresize = setRootFontSize
+  </script>
+</body>
+
+</html>

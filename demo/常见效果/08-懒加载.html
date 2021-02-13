@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    .outer {
+      margin: 50px auto;
+      width: 800px;
+      border: 1px solid red;
+    }
+
+    .outer img {
+      width: 360px;
+      margin: 20px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="outer"></div>
+
+  <script>
+    // 获取元素
+    const oOuter = document.querySelector('.outer')
+
+    const imgArr = ["https://s3.ax1x.com/2020/12/08/rSCogx.jpg",
+      "https://s3.ax1x.com/2020/12/08/rSCh59.jpg",
+      "https://s3.ax1x.com/2020/12/08/rSCI81.jpg",
+      "https://s3.ax1x.com/2020/12/08/rSCfUJ.jpg",
+      "https://s3.ax1x.com/2020/12/08/rSCWE4.jpg",
+      "https://s3.ax1x.com/2020/12/08/rSCHKK.jpg",
+      "https://s3.ax1x.com/2020/12/08/rSPCKf.jpg",
+      "https://s3.ax1x.com/2020/12/08/rSCqbD.jpg",
+      "https://s3.ax1x.com/2020/12/08/rSCbDO.jpg",
+      "https://s3.ax1x.com/2020/12/08/rSCTv6.jpg",
+      "https://s3.ax1x.com/2020/12/08/rSCOVe.jpg",
+      "https://s3.ax1x.com/2020/12/08/rSCXUH.jpg",
+      "https://s3.ax1x.com/2020/12/08/rSCj5d.jpg",
+      "https://s3.ax1x.com/2020/12/08/rSCxPA.jpg",
+      "https://s3.ax1x.com/2020/12/08/rSCz8I.jpg",
+      "https://s3.ax1x.com/2020/12/08/rSPPr8.jpg",
+      "https://s3.ax1x.com/2020/12/08/rSPS2t.jpg",
+      "https://s3.ax1x.com/2020/12/08/rSPpxP.jpg",
+      "https://s3.ax1x.com/2020/12/08/rSPiqS.jpg",
+      "https://s3.ax1x.com/2020/12/08/rSPkVg.jpg",
+      "https://s3.ax1x.com/2020/12/08/rSPE5j.jpg",
+      "https://s3.ax1x.com/2020/12/08/rSPZPs.jpg",
+      "https://s3.ax1x.com/2020/12/08/rSPMrT.jpg",
+      "https://s3.ax1x.com/2020/12/08/rSPeGn.jpg",
+      "https://s3.ax1x.com/2020/12/08/rSPm2q.jpg",
+      "https://s3.ax1x.com/2020/12/08/rSPnx0.jpg",
+      "https://s3.ax1x.com/2020/12/08/rSPQqU.jpg",
+      "https://s3.ax1x.com/2020/12/08/rSPKMV.jpg",
+      "https://s3.ax1x.com/2020/12/08/rSP3a4.jpg",
+      "https://s3.ax1x.com/2020/12/08/rSP1ZF.jpg"
+    ]
+
+    const fragment = document.createDocumentFragment()
+    imgArr.forEach(item => {
+      const newImg = new Image()
+      newImg.src = './images/loading.gif'
+      newImg.dataset.src = item
+      fragment.appendChild(newImg)
+    })
+    oOuter.appendChild(fragment)
+
+    const oImgs = document.querySelectorAll('.outer img')
+    window.onload = window.onscroll = function () {
+      const winHeight = document.documentElement.clientHeight
+      const scrollHeight = window.pageYOffset || document.documentElement.scrollTop
+      oImgs.forEach(item => {
+        if (getEleToDoc(item).top <= winHeight + scrollHeight){
+          item.src = item.dataset.src
+        }
+      })
+    }
+    function getEleToDoc(ele) {
+      const LT = {
+        left: 0,
+        top: 0
+      }
+      let obj = ele
+      while (obj) {
+        if (obj === ele) {
+          LT.left += ele.offsetLeft
+          LT.top += ele.offsetTop
+        } else {
+          LT.left += (obj.offsetLeft + obj.clientLeft)
+          LT.top += (obj.offsetTop + obj.clientTop)
+        }
+        obj = obj.offsetParent
+      }
+      return LT
+    }
+  </script>
+</body>
+
+</html>

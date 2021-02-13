@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    div {
+      /* width: 345px;
+      height: 150px;
+      margin: 15px; */
+      width: 3.45rem;
+      height: 1.5rem;
+      margin: 0.15rem;
+      background-color: skyblue;
+    }
+  </style>
+</head>
+
+<body>
+  <div></div>
+
+  <script>
+    /* 
+      公式：
+      根元素字体大小 = 当前设备横向独立像素值 * 100 / 设计稿宽度 px
+      属性值 = 设计值 / 100 rem
+    */
+    // 1.计算根元素的字体大小
+    // 2.需要使用css像素的属性把px换算成rem
+    function setRootFontSize() {
+      const rootFontSize = document.documentElement.clientWidth * 100 / 375
+      document.documentElement.style.fontSize = rootFontSize + 'px'
+    }
+    setRootFontSize()
+    window.onresize = setRootFontSize
+  </script>
+</body>
+
+</html>

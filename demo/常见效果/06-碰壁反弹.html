@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    .outer{
+      margin: 200px auto;
+      width: 1000px;
+      height: 500px;
+      border: 1px solid red;
+    }
+    .box{
+      width: 50px;
+      height: 50px;
+      background-color: skyblue;
+      border-radius: 50%;
+      position: relative;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="outer">
+    <div class="box"></div>
+  </div>
+  <script>
+    // 获取元素
+    const oOuter = document.querySelector('.outer')
+    const oBox = document.querySelector('.box')
+
+    // 获取box可运动的范围
+    const WH = {
+      w: oOuter.clientWidth - oBox.offsetWidth,
+      h: oOuter.clientHeight - oBox.offsetHeight
+    }
+    const LT = {
+      left: 0,
+      top: 0
+    }
+    let x = 1
+    let y = 1
+    setInterval(() => {
+      LT.left += x
+      LT.top += y
+      if (LT.left >= WH.w || LT.left <= 0) x *= -1
+      if (LT.top >= WH.h || LT.top <= 0) y *= -1
+      console.log(LT.left, LT.top)
+      oBox.style.left = LT.left + 'px'
+      oBox.style.top = LT.top + 'px'
+    })
+  </script>
+</body>
+
+</html>

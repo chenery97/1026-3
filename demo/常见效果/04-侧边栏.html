@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    .outer {
+      position: fixed;
+      right: 0;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    .outer>div {
+      margin: 20px 0;
+      height: 50px;
+      line-height: 50px;
+      text-align: center;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .outer div div.fixed {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      background: red;
+      z-index: 2;
+    }
+
+    .outer div div.hover {
+      position: relative;
+      padding: 0 20px;
+      /* left: -100px; */
+      background-color: skyblue;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="outer">
+    <div>
+      <div class="fixed">反馈</div>
+      <div class="hover">我的反馈</div>
+    </div>
+    <div>
+      <div class="fixed">反馈</div>
+      <div class="hover">我的反馈</div>
+    </div>
+    <div>
+      <div class="fixed">反馈</div>
+      <div class="hover">我的反馈</div>
+    </div>
+  </div>
+
+  <script>
+    // 获取元素
+    const oDivs = document.querySelectorAll('.outer > div')
+    const oHovers = document.querySelectorAll('.hover')
+
+    oDivs.forEach((item, index) => {
+      // 绑定鼠标移入事件
+      item.onmouseenter = mouseEvent(item, index, 0, null, true, oHovers)
+      // 绑定鼠标移出事件
+      item.onmouseleave = mouseEvent(item, index, null, 0, false, oHovers)
+    })
+
+    function mouseEvent(item, index, startLocation, endLocation, flag, ele) {
+      return () => {
+        let start = startLocation === 0 ? 0 : parseInt(ele[index].style.left)
+        const end = endLocation === 0 ? 0 : -item.offsetWidth
+        const step = flag ? -5 : 5
+        const timer = setInterval(() => {
+          start += step
+          if (flag ? start <= end : start >= end) {
+            start = end
+            clearInterval(timer)
+          }
+          ele[index].style.left = start + 'px'
+        })
+      }
+    }
+  </script>
+</body>
+
+</html>
