@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    div {
+      width: 100%;
+      height: 500px;
+      line-height: 500px;
+      /* border: 1px solid red; */
+      background-image: url(./images//5710984334b7e.jpg);
+    }
+    h1 {
+      font-size: 280px;
+    }
+  </style>
+</head>
+
+<body>
+  <div>
+    <h1>Hello jQuery</h1>
+  </div>
+  <script src="https://cdn.bootcdn.net/ajax/libs/jquery/1.9.1/jquery.js"></script>
+
+  <script>
+    $.fn.extend({
+      addBackgroundImg(path) {
+        $(this).css('background-image', 'url(' + path + ')')
+        return $(this)
+      },
+      changeColor(color) {
+        $(this).css('color', color)
+        return $(this)
+      },
+      addBackgroundClip(type) {
+        $(this).css('-webkit-background-clip', type)
+        return $(this)
+      }
+    })
+    console.log($('h1').addBackgroundImg('./images/56af0da3ae601.jpg').changeColor('transparent').addBackgroundClip('text'))
+  </script>
+</body>
+
+</html>

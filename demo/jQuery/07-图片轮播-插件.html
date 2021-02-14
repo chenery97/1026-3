@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+  <style>
+    #outer {
+      width: 500px;
+      height: 300px;
+      margin: 200px auto;
+      /* border: 1px solid red; */
+      position: relative;
+    }
+
+    button {
+      width: 20px;
+      height: 20px;
+      text-align: center;
+      vertical-align: middle;
+      background-color: transparent;
+      border: 1px solid skyblue;
+      border-radius: 50%;
+      color: #fff;
+      position: absolute;
+      z-index: 10;
+      outline: none;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+    }
+
+    .prev {
+      left: 5px;
+    }
+
+    .next {
+      right: 5px;
+    }
+
+    .box {
+      width: 100%;
+      position: relative;
+    }
+
+    .box img {
+      width: 500px;
+      height: 300px;
+      position: absolute;
+    }
+
+    .box img:nth-child(1) {
+      z-index: 5;
+    }
+
+    .box img:nth-child(2) {
+      z-index: 4;
+    }
+
+    .box img:nth-child(3) {
+      z-index: 3;
+    }
+
+    .box img:nth-child(4) {
+      z-index: 2;
+    }
+
+    .box img:nth-child(5) {
+      z-index: 1;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="outer">
+    <button class="prev">&lt;</button>
+    <div class="box">
+      <img src="./images/56af0da3ae601.jpg" alt="">
+      <img src="./images/5710984334b7e.jpg" alt="">
+      <img src="./images/5ba44d4304441.jpg" alt="">
+      <img src="./images/5cb450ae20929.jpg" alt="">
+      <img src="./images/F8F2-fxipenp2527999.jpg" alt="">
+    </div>
+    <button class="next">&gt;</button>
+    <ul class="img-list"></ul>
+  </div>
+
+  <script src="https://cdn.bootcdn.net/ajax/libs/jquery/1.9.1/jquery.js"></script>
+  <script src="./jquery.fade.js"></script>
+
+  <script>
+    $(function () {
+      let index = 0
+      const oImgs = document.querySelectorAll('.box img')
+      let autoTimer = null
+      let timeoutTimer = null
+      autoMove()
+
+      // 改变下标
+      function changeIndex(flag) {
+        flag ? index++ : index--
+        if (index >= oImgs.length) index = 0
+        else if (index < 0) index = oImgs.length - 1
+        // 调用实例上的动画方法
+        $(oImgs).fade(index)
+      }
+      // 定时开启自动动画
+      function timeoutMove() {
+        timeoutTimer = setTimeout(() => {
+          autoMove()
+        }, 3000);
+      }
+      // 自动动画
+      function autoMove() {
+        autoTimer = setInterval(() => {
+          changeIndex(true)
+        }, 2000);
+      }
+      // 点击切换
+      $('.next').click(function () {
+        clearInterval(autoTimer)
+        clearTimeout(timeoutTimer)
+        changeIndex(true)
+        timeoutMove()
+      })
+      // 点击切换
+      $('.prev').click(function () {
+        clearInterval(autoTimer)
+        clearTimeout(timeoutTimer)
+        changeIndex(false)
+        timeoutMove()
+      })
+    })
+  </script>
+</body>
+
+</html>

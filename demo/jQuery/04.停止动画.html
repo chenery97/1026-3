@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+  <style>
+    #box {
+      width: 200px;
+      height: 200px;
+      background-color: skyblue;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="box"></div>
+
+  <script src="https://cdn.bootcdn.net/ajax/libs/jquery/1.9.1/jquery.js"></script>
+  <script>
+    $(function () {
+      $('#box').on('mouseenter', function () {
+        $(this).stop(true, false).animate({
+          width: 500,
+          height: 500
+        }, 1000)
+      })
+      $('#box').on('mouseleave', function () {
+        $(this).stop(false, true).animate({
+          width: 100,
+          height: 100
+        }, 1000)
+      })
+    })
+  </script>
+</body>
+
+</html>

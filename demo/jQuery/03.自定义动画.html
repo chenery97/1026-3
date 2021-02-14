@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+  <style>
+    #outer {
+      width: 800px;
+      height: 600px;
+      border: 10px solid red;
+      position: relative;
+    }
+
+    #box {
+      width: 100px;
+      height: 100px;
+      background: yellow;
+      position: absolute;
+    }
+  </style>
+</head>
+
+<body>
+  <button id="btn">走你</button>
+  <div id="outer">
+    <div id="box"></div>
+  </div>
+
+  <script src="https://cdn.bootcdn.net/ajax/libs/jquery/1.9.1/jquery.js"></script>
+  <script>
+    $(function () {
+      $('#btn').on('click', () => {
+        console.log($('#outer').width() - $('#box').width())
+        setInterval(() => {
+          $('#box').animate({
+            left: $('#outer').width() - $('#box').width(),
+          }, 1000).animate({
+            top: $('#outer').height() - $('#box').height()
+          }, 1000).animate({
+            left: 0
+          }, 1000).animate({
+            top: 0
+          }, 1000)
+        }, 4000);
+      })
+    })
+  </script>
+</body>
+
+</html>

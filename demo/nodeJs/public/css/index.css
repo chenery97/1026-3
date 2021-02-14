@@ -1,0 +1,110 @@
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+}
+
+.nav {
+  position: fixed;
+  left: 0;
+  top: 0;
+  background-color: skyblue;
+  width: 100px;
+  height: 100%;
+}
+
+.nav ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.nav ul li {
+  margin: 10px;
+}
+
+.nav ul li a {
+  color: #fff;
+}
+
+.con {
+  margin: 50px 150px;
+  width: 1200px;
+}
+
+pre[class*=hljs] {
+  width: 1200px;
+  padding: 0px 10px;
+  background: #F8F8F8;
+  border: 1px solid #E7EAED;
+  border-radius: 2px;
+  position: relative;
+}
+
+pre::after {
+  content: '';
+  display: none;
+  height: 20px;
+  line-height: 20px;
+  width: 100px;
+  position: absolute;
+  right: 0;
+  bottom: -26px;
+  text-align: center;
+  font-size: 12px;
+  box-shadow: 0px 1px 1px #aaa;
+  background: #F8F8F8;
+  border: 1px solid #E7EAED;
+  border-radius: 2px;
+}
+
+pre:hover::after {
+  display: block;
+}
+
+pre code {
+  border: none;
+  padding: 0;
+}
+
+code {
+  height: 30px;
+  line-height: 30px;
+  padding: 2px 5px;
+  font-family: "Lucida Console";
+  background: #F8F8F8;
+  border: 1px solid #E7EAED;
+  border-radius: 2px;
+}
+
+.hljs-keyword {
+  color: #7700A5;
+}
+
+.hljs-title,
+.hljs-params {
+  color: #4B8ED0;
+}
+
+.hljs-comment {
+  color: #606E2A;
+}
+
+.hljs-string {
+  color: #B1115B;
+}
+
+.hljs-number {
+  color: #116644;
+}
+
+.hljs-literal {
+  color: #221199;
+}
+
+.hljs-built_in {
+  color: #DCDCAA;
+}
