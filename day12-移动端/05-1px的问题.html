@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>1px的问题</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    #box {
+      /* 2.把px换算成rem */
+      width: 3.45rem;
+      height: 1.5rem;
+      margin: 0.15rem;
+      border: 1px solid red;
+      font-size: 0.15rem;
+    }
+
+    /* 第一种解决方案，使用媒体查询，检测设备像素比的值，调整边框像素值 */
+    /* @media screen and (-webkit-min-device-pixel-ratio:3) {
+      #box {
+        border: calc(1px / 3) solid red;
+      }
+    } */
+  </style>
+</head>
+
+<body>
+  <div id="box"></div>
+
+  <script>
+    // 1.设置根标签的字体大小
+    function setRootFontSize() {
+      const rootFontSize = document.documentElement.clientWidth * 100 / 375
+      document.documentElement.style.fontSize = rootFontSize + 'px'
+    }
+    setRootFontSize()
+    window.onresize = setRootFontSize
+
+    // 第二种解决方案，设置initial-scale的值，通过放大布局视口，将页面元素缩小
+    // 获取meta标签name属性为viewport的元素
+    const viewport = document.querySelector('meta[name=viewport]')
+    // 计算
+    const scale = 1 / window.devicePixelRatio
+    // 设置initial-scale
+    viewport.setAttribute('content', 'width=device-width,initial-scale=' + scale)
+    // 因为缩小了页面元素，所以要重新设置根标签字体大小
+    document.documentElement.style.fontSize = parseInt(document.documentElement.style.fontSize) * window.devicePixelRatio + 'px'
+  </script>
+</body>
+
+</html>

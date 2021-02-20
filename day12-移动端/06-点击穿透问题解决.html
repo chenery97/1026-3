@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    #link {
+      width: 100%;
+      height: 300px;
+      background-color: red;
+    }
+
+    #link a {
+      display: block;
+      width: 100%;
+      height: 100%;
+      /* 解决方案三：设置pointer-events属性为none */
+      /* pointer-events: none; */
+    }
+
+    #mask {
+      width: 100%;
+      height: 300px;
+      position: fixed;
+      top: 0;
+    }
+
+    #mask {
+      padding-top: 100px;
+      text-align: center;
+      /* line-height: 300px; */
+      vertical-align: bottom;
+      background-color: rgba(200, 200, 200, .5);
+      box-sizing: border-box;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="link">
+    <a id="linkA">go to baidu.com</a>
+  </div>
+  <div id="mask">
+    <h1>hello</h1>
+    <button id="btn">button</button>
+  </div>
+
+  <script>
+    /* 
+      案例：
+      背后标签以a标签为例
+    */
+    // 点击后，隐藏蒙版，延迟触发的click事件会作用到a元素身上，导致点击穿透的问题
+    /* btn.addEventListener('touchstart', function (e) {
+      mask.style.display = 'none'
+      // 解决方案一：在touchstart事件函数中阻止默认行为
+      e.preventDefault()
+    }) */
+    /* btn.addEventListener('touchstart', function () {
+      // 解决方案二：click事件延迟300ms左右，所以设置蒙版在400ms后再隐藏，用户体验性不好
+      setTimeout(() => mask.style.display = 'none', 400)
+    }) */
+    /* btn.addEventListener('touchstart', function () {
+      mask.style.display = 'none'
+      // 解决方案三：配合css的pointer-events属性，默认为none，等待蒙版隐藏后，再设置为auto
+      setTimeout(() => linkA.style.pointerEvents = 'auto', 400)
+    }) */
+    /* btn.addEventListener('touchstart', function () {
+      mask.style.display = 'none'
+      // 解决方案四：a标签默认不设置href属性，等待蒙版隐藏后，再设置上href属性
+      setTimeout(() => linkA.href = 'http://www.baidu.com', 400)
+    }) */
+    btn.addEventListener('touchstart', function () {
+      mask.style.display = 'none'
+    })
+    linkA.addEventListener('touchstart', function () {
+      // 解决方案五：a标签默认不设置href属性，给a标签绑定touchstart事件，通过location的href属性实现a标签的功能
+      location.href = 'http://www.baidu.com'
+    })
+  </script>
+</body>
+
+</html>

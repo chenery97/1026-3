@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    #box{
+      widows: 500px;
+      height: 500px;
+      background-color: red;
+    }
+  </style>
+</head>
+<body>
+  <div id="box"></div>
+
+  <script>
+    /* 
+      点击穿透：
+        在移动端中点击屏幕，touch事件结束后延迟300ms左右会在触发touch事件的位置触发click事件，而如果触发touch事件的目标元素消失了，则会触发下一层元素的点击事件，这一过程称为点击穿透
+    */
+    box.addEventListener('touchstart', function () {
+      console.log('手指触摸了')
+    })
+    box.addEventListener('click', function () {
+      console.log('触发click事件函数')
+    })
+    box.addEventListener('touchmove', function () {
+      console.log('手指移动了')
+    })
+    /* box.addEventListener('touchend', function () {
+      console.log('手指离开了')
+    }) */
+
+  </script>
+</body>
+</html>
