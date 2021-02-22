@@ -1,0 +1,95 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+/* body {
+  background-color: #fff;
+} */
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+.wrap {
+  height: 100%;
+  background-color: #fff;
+}
+
+.ipt-phone {
+  display: flex;
+  align-items: center;
+}
+
+.ipt-code {
+  margin-left: 10px;
+  padding: 5px 10px;
+  border: none;
+  border-left: 1px solid #ccc;
+  color: #bbb;
+  background: transparent;
+  outline: none;
+}
+
+.ipt-code.active {
+  background-color: red;
+  color: #fff;
+}
+
+.login-btn {
+  border-radius: 50px;
+}
+
+.login-nav {
+  display: flex;
+  justify-content: space-between;
+  color: #bbb;
+}
+
+.login-other {
+  margin-top: 100px;
+  display: flex;
+  align-items: center;
+}
+
+.login-other .line {
+  flex-grow: 1;
+  border-top: 1px solid #ccc;
+}
+
+.login-other .text {
+  margin: 0 15px;
+  color: #bbb;
+}
+
+.other-oauth {
+  margin-top: 50px;
+  text-align: center;
+}
+
+.other-oauth i {
+  font-size: 30px;
+  padding: 5px;
+  border-radius: 50%;
+}
+
+.other-oauth i:nth-child(1) {
+  background-color: #ccc;
+}
+
+.other-oauth i:nth-child(2) {
+  background-color: lightgreen;
+  margin: 0 20px;
+}
+
+.other-oauth i:nth-child(3) {
+  background-color: skyblue;
+}
+
+.login-footer {
+  margin-top: 100px;
+  line-height: 30px;
+  text-align: center;
+}

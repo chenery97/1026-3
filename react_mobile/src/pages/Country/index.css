@@ -1,0 +1,33 @@
+.am-list-body {
+  padding-right: 20px;
+}
+.countryNav {
+  height: 70%;
+  width: 20px;
+  position: fixed;
+  right: 5px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  text-align: center;
+}
+
+.countryNav button{
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  line-height: 20px;
+  color: #999;
+  border-style: none;
+  outline: none;
+  background-color: transparent;
+}
+
+.countryNav button.active{
+  border-radius: 50%;
+  background-color: skyblue;
+  color: #fff;
+}
